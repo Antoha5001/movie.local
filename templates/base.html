@@ -26,8 +26,26 @@
 <body>
 
     <div id="page" class="page">
-{% include 'includes/header.html' %}
 
+{% comment %} <div class="main-banner bg bg1" id="home" style="background-color: rgba(0, 0, 0, 0); margin-top: 0px; background-image: url({% static 'single-post-pic.jpg' %});"> {% endcomment %}
+
+
+        <div class="main-banner bg bg1 {% block banner %} {% endblock banner %}" id="home">
+{% include 'includes/header.html' %}
+     <div class="banner-info">
+                <p class="editContent" >лучший сайт на django 3</p>
+                <h3 class="mb-4 editContent">Все о кино</h3>
+                <div class="ban-buttons"></div>
+            </div>
+            <!--// banner-inner -->
+
+    </div>
+    <ol class="breadcrumb editContent">
+        <li class="breadcrumb-item">
+            <a href="index.html" class="editContent">Home</a>
+        </li>
+        <li class="breadcrumb-item active editContent">Single Page</li>
+    </ol>
 {% block content %}
 {% endblock content %}
 
