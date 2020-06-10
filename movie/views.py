@@ -29,14 +29,20 @@ class Homepage(ListView):
 
     #     return render(request, 'movies/movies.html', context=context)
 
-class HomepageDetail(View):
+class HomepageDetail(DetailView):
 
-    def get(self, request, slug):
+    model = Movie
 
-        movie = Movie.objects.get(url=slug)
+    slug_field = 'url'
 
-        context = {
-            'movie': movie
-        }
+    template_name = 'movies/movie_detail.html'
 
-        return render(request, 'movies/movie_detail.html', context=context)
+    # def get(self, request, slug):
+
+    #     movie = Movie.objects.get(url=slug)
+
+    #     context = {
+    #         'movie': movie
+    #     }
+
+    #     return render(request, 'movies/movie_detail.html', context=context)
