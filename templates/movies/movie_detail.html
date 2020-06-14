@@ -3,6 +3,8 @@
 {% block banner %}
 inner
 {% endblock banner %}
+
+
    {% block content %}  
     
     <!--//main-content-->
@@ -17,7 +19,11 @@ inner
             <div class="row">
                 <!-- product left -->
 
-                    {% include 'includes/sidebar.html' %}
+{% block sidebar %}
+    <div class="side-bar col-lg-4">
+        {% include 'includes/sidebar.html' %}
+    </div>
+{% endblock sidebar %}
                 {% comment %} <div class="side-bar col-lg-4">
 
                     <div class="search-bar w3layouts-newsletter">
@@ -360,9 +366,8 @@ inner
                         <h3 class="shop-sing editContent" style="outline: none; cursor: inherit;">
                             О фильме {{ movie.title }}</h3>
                         <p> <br><br>
-                        {{movie.moviescene_get}}
                          {% for image in movie.moviescene_set.all  %}
-                            <img src="{{image.image.url}}" class="img-fluid" alt="">
+                            <img src="{{image.image.url}}" class="img-fluid" alt="{{image.description }}">
                         
                         {% endfor %} 
                         </p>
@@ -393,78 +398,112 @@ inner
                         <div class="single-form-left">
                             <!-- contact form grid -->
                             <div class="contact-single">
-                                <h3 class="editContent" style="outline: none; cursor: inherit;">
-                                    <span class="sub-tittle editContent"
-                                          style="outline: none; cursor: inherit;">02</span>Оставить отзыв</h3>
-                                <form action="#" method="get" class="mt-4">
+                                <h3 class="editContent" style="outline: none;">
+                                    <span class="sub-tittle editContent" style="outline: none;">02</span>Оставить отзыв
+                                </h3>
+
+                                <form action="{% url 'post_comment' movie.id %}" method="post" class="mt-4" id="formReview">{% csrf_token %}
+                                    <input type="hidden" name="parent" id="inputParent" value="">
+
                                     <div class="form-group editContent"
-                                         style="outline: none; cursor: inherit;">
-                                        <label for="contactcomment" class="editContent"
-                                               style="outline: none; cursor: inherit;">Ваш комментарий
-                                            *</label>
+                                         style="outline: none;">
+                                        <label for="contactcomment" class="editContent" style="outline: none; ">Ваш комментарий*</label>
+
                                         <textarea class="form-control border" rows="5"
-                                                  id="contactcomment" required=""></textarea>
+                                                  id="contactcomment" required="" name="text"></textarea>
                                     </div>
+
                                     <div class="d-sm-flex">
                                         <div class="col-sm-6 form-group p-0 editContent"
-                                             style="outline: none; cursor: inherit;">
+                                             style="outline: none; ">
                                             <label for="contactusername" class="editContent"
-                                                   style="outline: none; cursor: inherit;">Имя
+                                                   style="outline: none;">Имя
                                                 *</label>
                                             <input type="text" class="form-control border"
-                                                   id="contactusername" required="">
+                                                   id="contactusername" required="" name="name">
                                         </div>
                                         <div class="col-sm-6 form-group ml-sm-3 editContent"
-                                             style="outline: none; cursor: inherit;">
+                                             style="outline: none;">
                                             <label for="contactemail" class="editContent"
-                                                   style="outline: none; cursor: inherit;">Email
+                                                   style="outline: none; ">Email
                                                 *</label>
                                             <input type="email" class="form-control border"
-                                                   id="contactemail" required="">
+                                                   id="contactemail" required  name="email">
                                         </div>
                                     </div>
+
                                     <button type="submit"
                                             class="mt-3 btn btn-success btn-block py-3"
-                                            style="outline: none; cursor: inherit;">Отправить
+                                            style="outline: none;">Отправить
                                     </button>
                                 </form>
+
                             </div>
                             <!--  //contact form grid ends here -->
                         </div>
-                        <div class="media py-5">
-                            <img src="bundles/images/te2.jpg" class="mr-3 img-fluid" alt="image"
+
+                        {% for review in movie.get_parents %}
+                        <div class="media py-5" style="width: 100%">
+                            <img src="{% static 'images/te2.jpg'%} " class="mr-3 img-fluid" alt="image"
                                  style="outline: none; cursor: inherit;">
                             <div class="media-body mt-4">
-                                <h5 class="mt-0 editContent"
-                                    style="outline: none; cursor: inherit;">Daniel Doe</h5>
-                                <p class="mt-2 editContent" style="outline: none; cursor: inherit;">
-                                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-                                    scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-                                    vulputate at, tempus viverra turpis.
+                                <h5 class="mt-0 editContent" style="outline: none;">{{ review.name }}</h5>
+                                <p class="mt-2 editContent" style="outline: none; ">
+                                {{ review.text }}
                                 </p>
-                                <div class="media mt-5 editContent"
-                                     style="outline: none; cursor: inherit;">
+                                    <a href="#formReview" onclick="addAnswer('{{ review.name }}', '{{ review.id }}')">Ответить</a> <br>
+                                {% for rew in review.review_set.all %}
+                                    <div class="media mt-5 editContent" style="outline: none; ">
                                     <a class="pr-3" href="#">
-                                        <img src="bundles/images/te1.jpg" class="img-fluid "
+                                        <img src="{% static 'images/te1.jpg'%}" class="img-fluid "
                                              alt="image" style="outline: none; cursor: inherit;">
                                     </a>
                                     <div class="media-body">
                                         <h5 class="mt-0 editContent"
-                                            style="outline: none; cursor: inherit;">Leia Organa</h5>
-                                        <p class="mt-2 editContent"
-                                           style="outline: none; cursor: inherit;"> Cras sit amet
-                                            nibh libero, in gravida nulla. Nulla vel metus
-                                            scelerisque ante sollicitudin. Cras purus odio,
-                                            vestibulum in vulputate at, tempus viverra turpis. Fusce
-                                            condimentum nunc ac nisi vulputate fringilla..</p>
+                                            style="outline: none; ">{{ rew.name }}</h5>
+                                        <p class="mt-2 editContent" style="outline: none; "> {{ rew.text }}</p>
                                     </div>
                                 </div>
+                                {% endfor %}
+
+
+
+
+{#                                <p class="mt-2 editContent" style="outline: none; cursor: inherit;">#}
+{#                                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus#}
+{#                                    scelerisque ante sollicitudin. Cras purus odio, vestibulum in#}
+{#                                    vulputate at, tempus viverra turpis.#}
+{#                                </p>#}
+{#                                <div class="media mt-5 editContent"#}
+{#                                     style="outline: none; cursor: inherit;">#}
+{#                                    <a class="pr-3" href="#">#}
+{#                                        <img src="bundles/images/te1.jpg" class="img-fluid "#}
+{#                                             alt="image" style="outline: none; cursor: inherit;">#}
+{#                                    </a>#}
+{#                                    <div class="media-body">#}
+{#                                        <h5 class="mt-0 editContent"#}
+{#                                            style="outline: none; cursor: inherit;">Leia Organa</h5>#}
+{#                                        <p class="mt-2 editContent"#}
+{#                                           style="outline: none; cursor: inherit;"> Cras sit amet#}
+{#                                            nibh libero, in gravida nulla. Nulla vel metus#}
+{#                                            scelerisque ante sollicitudin. Cras purus odio,#}
+{#                                            vestibulum in vulputate at, tempus viverra turpis. Fusce#}
+{#                                            condimentum nunc ac nisi vulputate fringilla..</p>#}
+{#                                    </div>#}
+{#                                </div>#}
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </section>
+       <script>
+               function addAnswer(name, id){
+                   document.getElementById('inputParent').value = id;
+                   document.getElementById('contactcomment').append(name+", ");
+               }
+       </script>
     <!-- //contact -->
    {% endblock content %}

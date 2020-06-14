@@ -8,7 +8,12 @@
     <div class="container-fluid py-md-3">
         <div class="row">
 
-        {% include 'includes/sidebar.html' %}
+        {% block sidebar %}
+            <div class="side-bar col-lg-3">
+                {% include 'includes/sidebar.html' %}
+            </div>
+        {% endblock sidebar %}
+
         
         {% block movie %}
         {% endblock movie %}

@@ -2,6 +2,7 @@ from django.db import models
 from datetime import date
 from django.urls import reverse
 
+
 class Category(models.Model):
     name = models.CharField('Категории', max_length=150)
     description = models.TextField('Описание')
@@ -14,8 +15,9 @@ class Category(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
-class Actor(models.Model):
 
+class Actor(models.Model):
+    """Актёры"""
     name = models.CharField('Имя и Фамилия', max_length=100)
     age = models.PositiveSmallIntegerField('Возраст')
     description = models.TextField(verbose_name='Описание')
@@ -30,6 +32,7 @@ class Actor(models.Model):
 
 
 class Ganre(models.Model):
+    """Жанры"""
     name = models.CharField('Название жанра',max_length=100)
     description = models.TextField('Описание')
     url = models.SlugField(max_length=160, unique=True)
@@ -41,6 +44,7 @@ class Ganre(models.Model):
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
 
+
 class MovieManager(models.Manager):
 
     def get_queryset(self):
@@ -48,6 +52,7 @@ class MovieManager(models.Manager):
         
 
 class Movie(models.Model):
+    """Фильмы"""
     title = models.CharField('Название', max_length=100)
     tagline = models.CharField('Слоган',max_length=100, default="")
     description = models.TextField('Описание')
@@ -72,12 +77,13 @@ class Movie(models.Model):
 
     def get_absolute_url(self):
         return reverse("home_detail", kwargs={"slug": self.url})
-    
+
+    def get_parents(self):
+        return self.review_set.filter(parent__isnull=True)
 
     class Meta:
         verbose_name='Фильм'
         verbose_name_plural='Фильмы'
-
 
 
 class StarRatings(models.Model):
@@ -90,6 +96,7 @@ class StarRatings(models.Model):
         verbose_name = 'Звезда рейтинга'
         verbose_name_plural = 'Звезды рейтинга'
 
+
 class Rating(models.Model):
     ip = models.CharField('IP адрес',max_length=15)
     stars = models.ForeignKey(StarRatings, on_delete=models.CASCADE, null=True, verbose_name='Звезда', related_name='star_rating')
@@ -101,7 +108,6 @@ class Rating(models.Model):
     class Meta:
         verbose_name = 'Рейтинг'
         verbose_name_plural = 'Рейтинг'
-
 
 
 class MovieScene(models.Model):
@@ -119,8 +125,9 @@ class MovieScene(models.Model):
         verbose_name = 'Кадры из фильма'
         verbose_name_plural = 'Кадры из фильма'
 
+
 class Review(models.Model):
-    email= models.EmailField()
+    email = models.EmailField()
     name = models.CharField('Имя', max_length=150)
     text = models.TextField('Сообщение', max_length=5000)
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Родитель')
@@ -128,11 +135,11 @@ class Review(models.Model):
 
     def __str__(self):
         return self.name
-
     
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
+
 
 
 
