@@ -69,7 +69,7 @@ class GanreAdmin(admin.ModelAdmin):
 # ==== Фильм ====
 
 class MovieAdminForm(forms.ModelForm):
-    description = forms.CharField(widget=CKEditorWidget())
+    description = forms.CharField(label="Описание",widget=CKEditorWidget())
     class Meta:
         model = Movie
         fields = '__all__'
