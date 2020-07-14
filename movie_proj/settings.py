@@ -205,6 +205,6 @@ CKEDITOR_CONFIGS = {
             'image2',
             'youtube'
         ]),
-        "removePlugins": ",".join(['image']),
+        # "removePlugins": ",".join(['image']),
     }
 }
