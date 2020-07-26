@@ -81,6 +81,7 @@ class MovieAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'title']
     list_editable = ('draft',)
     search_fields = ['title', 'description', 'category__name']
+    actions = ['publish', 'unpublish']
 
     form = MovieAdminForm
 
@@ -107,6 +108,37 @@ class MovieAdmin(admin.ModelAdmin):
         }),
         )
         
+    def publish(self, request, queryset):
+
+        row_update = queryset.update(draft=False)
+
+        if row_update == '1':
+            message_bit = 'Опубликован один фильм'
+        else:
+            message_bit = f'{row_update} фильмов опубликовано'
+        
+        self.message_user(request, f'{message_bit}')
+
+    
+    publish.short_description = 'Опубликовать фильм'
+    publish.allowed_permissions = ('change', )
+
+
+    def unpublish(self, request, queryset):
+
+        row_update = queryset.update(draft=True)
+
+        if row_update == '1':
+            message_bit = 'Снят с публикации один фильм'
+        else:
+            message_bit = f'{row_update} фильмов снято с публикации'
+        
+        self.message_user(request, f'{message_bit}')
+    
+    unpublish.short_description = 'Снять с публикации фильм'
+    unpublish.allowed_permissions = ('change', )
+
+    
     
 
     list_filter =  ['title', 'year', 'category']

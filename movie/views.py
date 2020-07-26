@@ -18,6 +18,7 @@ class Homepage(ListView):
     template_name = 'movies/movies.html'
     
     context_object_name = 'movies'
+    queryset = Movie.objects.filter(draft=False)
 
     # def get(self, request, *args, **kwargs):
 
@@ -33,6 +34,7 @@ class Homepage(ListView):
 class HomepageDetail(DetailView):
 
     model = Movie
+
 
     slug_field = 'url'
 

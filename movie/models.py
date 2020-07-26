@@ -70,7 +70,7 @@ class Movie(models.Model):
     url = models.SlugField(max_length=130, unique=True)
     draft = models.BooleanField(verbose_name="Черновик", default=False)
 
-    objects = MovieManager()
+    # objects = MovieManager()
 
     def __str__(self):
         return self.title
