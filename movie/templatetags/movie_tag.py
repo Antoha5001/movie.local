@@ -10,7 +10,7 @@ def get_categories():
 
 
 @register.inclusion_tag('movies/template_tags/last_movies.html')
-def get_last_movies():
+def get_last_movies(slices=2):
     '''Возвращает последние записи'''
-    movies = Movie.objects.order_by('id')[:5]
+    movies = Movie.objects.order_by('id')[:slices]
     return {'last_movies' : movies}
